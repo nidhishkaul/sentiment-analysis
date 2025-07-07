@@ -6,10 +6,10 @@ from tensorflow.keras.models import load_model
 import pickle
 
 # Load the model
-model = load_model("model.h5")
+model = load_model("model.keras")
 
 # Load the tokenizer
-with open("tokenizer.pickle", "rb") as file:
+with open("tokenizer.pkl", "rb") as file:
     tokenizer = pickle.load(file)
 
 max_len = 815 # Set the maximum length of input sequences
@@ -26,11 +26,11 @@ if st.button("Check Toxicity"):
     if comment.strip() == "":
         st.warning("Please enter a comment to analyze.")
     else:
-        # Preprocess
+        # Preprocessing
         sequence = tokenizer.texts_to_sequences([comment])
         padded = pad_sequences(sequence, maxlen=max_len)
         
-        # Predict
+        # Prediction
         prediction = model.predict(padded)[0][0]
         label = "🚫 Toxic" if prediction > 0.5 else "✅ Non-Toxic"
         confidence = prediction if prediction > 0.5 else 1 - prediction
